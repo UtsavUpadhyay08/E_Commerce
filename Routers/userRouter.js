@@ -1,17 +1,23 @@
 const express=require('express');
 const userRouter=express.Router();
 const {getUser,updateUser,deleteUser,getAllUsers}=require("../controller/userController")
-
+const {signup,login,isAuthorised,protectRoute}=require("../controller/authController")
 userRouter.route("/:id")
 .patch(updateUser)
 .delete(deleteUser)
 
-app.use(protectRoute)
-userRouter.route("/profilepage")
-.get(getUser)
+userRouter.route("/signup")
+.post(signup)
 
-app.use(isAuthorised["admin"])
-userRouter.route("")
-.get(getAllUsers)
+userRouter.route("/login")
+.post(login)
+
+// app.use(protectRoute)
+// userRouter.route("/profilepage")
+// .get(getUser)
+
+// app.use(isAuthorised["admin"])
+// userRouter.route("")
+// .get(getAllUsers)
 
 module.exports=userRouter
