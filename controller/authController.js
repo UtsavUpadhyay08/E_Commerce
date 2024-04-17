@@ -109,25 +109,3 @@ module.exports.protectRoute=async function protectRoute(req,res,next){
         });
     }
 }
-
-
-// authRouter.route("/setCookies")
-// .get(setCookies);
-
-// authRouter.route("/getCookies")
-// .get(getCookies);
-
-// function setCookies(req,res){
-//     res.cookie("isLoggedin","true",{maxAge:1000*1000,httpOnly:true,secure:true});
-//     res.cookie("isPrime","true54336578986",{maxAge:1000*1000,httpOnly:true,secure:true});
-//     res.send({
-//         message:"Cookies set"
-//     });
-// }
-
-// function getCookies(req,res){
-//     res.send({
-//         message:"Cookies set",
-//         cookies:req.cookies
-//     });
-// }
