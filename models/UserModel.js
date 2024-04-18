@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
 const bcrypt=require('bcrypt');
+const token=require("crypto-token")
 
 const url="mongodb+srv://utsavup2004:EWMYii6V5B58RGc2@cluster0.kjwg5z6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
@@ -37,12 +38,14 @@ const userSchema=mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["admin","user","deliveryboy"]
+        enum:["admin","user","deliveryboy"],
+        default:"user"
     },
     profileImg:{
         type:String,
         default:"../img/default.jpeg"
-    }
+    },
+    resetToken:String
 })
 
 
@@ -58,3 +61,18 @@ userSchema.pre('save',async function(){
     this.password=hashed;
     // console.log(hashed);
 })
+
+userSchema.methods.createResetToken=async function(){
+    let reset_token=await token(32);
+    this.resetToken=reset_token;
+    // console.log(reset_token);
+    return reset_token;
+}
+
+userSchema.methods.resetPasswordHandler=function(password,confirmpassword){
+    this.password=password;
+    this.confirmpassword=confirmpassword;
+    this.resetToken=undefined;
+    // console.log(reset_token);
+    // return reset_token;
+}

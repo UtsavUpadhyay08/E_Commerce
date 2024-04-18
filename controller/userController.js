@@ -2,9 +2,12 @@ const mongoose=require("mongoose");
 const userSchema=require('../models/UserModel')
 const userModel=mongoose.model('userModel',userSchema);
 
-module.exports.getuser=async function getuser(req,res){
+module.exports.getUser=async function getUser(req,res){
     try{
-        let user=await userModel.findById(req.params.id);
+        // console.log(req.id);
+        // console.log(req.role);
+        // let user=await userModel.find();
+        let user=await userModel.findById(req.id);
         if(!user){
             res.json({
                 message:"User Not Found"
@@ -25,16 +28,22 @@ module.exports.getuser=async function getuser(req,res){
 module.exports.updateUser=async function updateUser(req,res){
     try{
         let id=req.params.id;
-        let user=await findById(id);
-        for(let keys in req.body){
-            if(user[keys]){
-                user[keys]=req.body[keys];
-            }
+        let user=await userModel.findById(id);
+        if(!user){
+            res.json({
+                message:"User Not found"
+            });
+            return;
         }
-        let data=await user.save();
+        for(let keys in req.body){
+            user[keys]=req.body[keys];
+        }
+        // console.log(user);
+        // await user.save();
+        await userModel.findByIdAndUpdate(id,user);
         res.json({
             message:"Successfully updated",
-            data:data
+            data:user
         });
     }
     catch(err){
@@ -47,11 +56,12 @@ module.exports.updateUser=async function updateUser(req,res){
 module.exports.deleteUser=async function deleteUser(req,res){
     try{
         let id=req.params.id;
-        let user=await findByIdAndDelete(id);
+        let user=await userModel.findByIdAndDelete(id);
         if(!user){
             res.json({
                 message:"User not found"
             });
+            return;
         }
         res.json({
             message:"Deleted User",

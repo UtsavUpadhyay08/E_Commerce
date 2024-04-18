@@ -70,11 +70,11 @@ module.exports.login=async function login(req,res){
 
 module.exports.isAuthorised=function isAuthorised(roles){
     return function(req,res,next){
-        if(roles.include(req.role)){
+        if(roles.includes(req.role)){
             next();
         }
         else{
-            res.json({
+            res.status(401).json({
                 message:"Not allowed"
             })
         }
@@ -85,11 +85,19 @@ module.exports.protectRoute=async function protectRoute(req,res,next){
     try{
         if(req.cookies.isLoggedin){
             const payload=jwt.verify(req.cookies.isLoggedin,key);
+            // console.log(payload);
             if(payload){
-                const user=await userModel.findById(payload.payload);
+                const user=await userModel.findById(payload.uid);
+                // console.log(user);
                 req.role=user.role;
                 req.id=user.id;
-                next();
+                // console.log(req);
+                // console.log(user);
+                return next();
+                
+                res.json({
+                    message:"Not authenticated"
+                });
             }
             else{
                 res.json({
@@ -107,5 +115,55 @@ module.exports.protectRoute=async function protectRoute(req,res,next){
         res.json({
             message:err.message
         });
+    }
+}
+
+module.exports.forgetPassword=async function forgetPasword(req,res){
+    try{
+        // console.log(req.body)
+        let user=await userModel.findOne({email:req.body.email});
+        // console.log(user);
+        if(!user){
+            res.json({
+                message:"User Not Found"
+            });
+            return;
+        }
+        const new_token=await user.createResetToken();
+        const new_link=`${req.protocol}://${req.headers.host}/resetPassword/${new_token}`;
+        // await user.save();
+        // console.log(new_token);
+        res.json({
+            message:"New link generated",
+            link:new_link
+        });
+    }
+    catch(err){
+        res.json({
+            message:err.message
+        });
+    }
+}
+
+module.exports.resetPassword=async function resetPassword(req,res){
+    try{
+        let user=await userModel.findOne({resetToken:req.params.token});
+        if(!user){
+            res.json({
+                message:"Invalid User Link"
+            });
+            return;
+        }
+        await user.resetPasswordHandle(req.body.password,req.body.confirmpassword);
+        // await user.save();
+        res.json({
+            message:"New Password saved",
+            data:user
+        });
+    }
+    catch(err){
+        res.json({
+            message:err.message
+        })
     }
 }
