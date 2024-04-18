@@ -106,6 +106,10 @@ module.exports.protectRoute=async function protectRoute(req,res,next){
             }
         }
         else{
+            const client=req.get["User-Agent"];
+            if(client.includes("Mozilla")){
+                return res.redirect("/login");
+            }
             res.json({
                 message:"Operation Not Allowed"
             });
@@ -165,5 +169,19 @@ module.exports.resetPassword=async function resetPassword(req,res){
         res.json({
             message:err.message
         })
+    }
+}
+
+module.exports.logout=async function logout(req,res){
+    try{
+        res.cookie("isLoggedin",{},{maxAge:0});
+        res.json({
+            message:"User logged out"
+        });
+    }
+    catch(err){
+        res.json({
+            message:err.message
+        });
     }
 }
