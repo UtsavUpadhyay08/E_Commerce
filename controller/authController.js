@@ -95,9 +95,9 @@ module.exports.protectRoute=async function protectRoute(req,res,next){
                 // console.log(user);
                 return next();
                 
-                res.json({
-                    message:"Not authenticated"
-                });
+                // res.json({
+                //     message:"Not authenticated"
+                // });
             }
             else{
                 res.json({

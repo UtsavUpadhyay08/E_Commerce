@@ -2,7 +2,7 @@ const express=require('express');
 const userRouter=express.Router();
 const {getUser,updateUser,deleteUser,getAllUsers}=require("../controller/userController")
 const {signup,login,isAuthorised,protectRoute,forgetPassword,resetPassword,logout}=require("../controller/authController")
-const app=express()
+// const app=express()
 
 userRouter.route("/:id")
 .patch(updateUser)
