@@ -60,7 +60,7 @@ module.exports.createreview=async function createreview(req,res){
                 message:"No such plan"
             });
         }
-        changeplan(req.params.plan,new_review.rating,-1);
+        changeplan(req.params.plan,new_review.rating,0);
         res.json({
             message:"Review Created",
             data:new_review
@@ -80,15 +80,24 @@ module.exports.updatereview=async function updatereview(req,res){
                 message:"Review Not FOund"
             });
         }
-        let rating=new_review.rating;
-        for(let keys in req.body){
-            new_plan[keys]=req.body[keys];
+        let val=1;
+        // console.log(req.body);
+        if(req.body.rating && new_review.rating!=req.body.rating) val=changeplan(new_review.plan,req.body.rating,new_review.rating);
+        // console.log(req.body.rating,new_review.rating);
+        if(val==0){
+            return res.json({
+                message:"Plan not found"
+            });
         }
-        if(new_plan.rating!=rating) changeplan(new_review.plan,new_plan.rating,rating); 
-        await new_plan.save();
+        for(let keys in req.body){
+            new_review[keys]=req.body[keys];
+        }
+        // new_review["plan"]=req.params.id;
+        await new_review.save();
+        const data=await reviewModel.findById(req.params.id);
         res.json({
             message:"Review Created",
-            data:new_review
+            data:data
         });
     }
     catch(err){

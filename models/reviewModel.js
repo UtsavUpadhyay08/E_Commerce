@@ -10,7 +10,7 @@ mongoose.connect(url)
 const reviewSchema=new mongoose.Schema({
     review:{
         type:String,
-        required:[true,"Review is required"]
+        required:[true,"Review is required"],
     },
     rating:{
         type:Number,

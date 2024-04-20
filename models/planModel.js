@@ -23,10 +23,12 @@ const planSchema=new mongoose.Schema({
         required:true
     },
     ratingsAverage:{
-        type:Number
+        type:Number,
+        default:0
     },
     totalratings:{
-        type:Number
+        type:Number,
+        default:0
     },
     discount:{
         type:Number,
