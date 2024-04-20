@@ -8,8 +8,10 @@ app.use(cookieparser());
 
 // const planModel=require("./models/planModel")
 
-const userRouter=require("./Routers/userRouter");
+const userRouter = require("./Routers/userRouter");
 const planRouter = require('./Routers/planRouter');
+const reviewRouter = require('./Routers/reviewRouter');
 
 app.use("/user",userRouter);
 app.use("/plan",planRouter);
+app.use("/review",reviewRouter);
