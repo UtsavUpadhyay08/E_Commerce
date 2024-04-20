@@ -34,14 +34,15 @@ module.exports.topreview=async function topreview(req,res){
 }
 module.exports.getplanreview=async function getplanreview(req,res){
     try{
-        const review=await reviewModel.findById(req.params.id);
+        const review=await reviewModel.find();
+        review.filter(review=>review.plan._id==req.params.id);
         if(!review){
             return res.json({
                 message:"Review not found"
             });
         }
         res.json({
-            message:"Review found",
+            message:"Reviews found",
             review:review
         });
     }
@@ -57,7 +58,7 @@ module.exports.createreview=async function createreview(req,res){
         const plan=await planModel.findById(req.params.plan);
         if(!plan){
             return res.json({
-                message:"No such plan"
+                message:"No such review"
             });
         }
         changeplan(req.params.plan,new_review.rating,0);
@@ -86,7 +87,7 @@ module.exports.updatereview=async function updatereview(req,res){
         // console.log(req.body.rating,new_review.rating);
         if(val==0){
             return res.json({
-                message:"Plan not found"
+                message:"Review not found"
             });
         }
         for(let keys in req.body){
@@ -110,7 +111,7 @@ module.exports.deletereview=async function deletereview(req,res){
     try{
         const new_review=await reviewModel.findByIdAndDelete(req.params.id);
         res.json({
-            message:"Plan Deleted Successfully",
+            message:"Review Deleted Successfully",
             data:new_review
         });
     }
