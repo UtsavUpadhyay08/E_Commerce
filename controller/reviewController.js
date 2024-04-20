@@ -1,4 +1,6 @@
+const planModel = require("../models/planModel");
 const reviewModel = require("../models/reviewModel");
+const { changeplan } = require("./authController");
 
 module.exports.getAllreview=async function getAllreview(req,res){
     try{
@@ -49,6 +51,63 @@ module.exports.getplanreview=async function getplanreview(req,res){
         });
     }
 }
-module.exports.createreview=function createreview(){};
-module.exports.updatereview=function updatereview(){};
-module.exports.deletereview=function deletereview(){};
+module.exports.createreview=async function createreview(req,res){
+    try{
+        const new_review=await reviewModel.create(req.body);
+        const plan=await planModel.findById(req.params.plan);
+        if(!plan){
+            return res.json({
+                message:"No such plan"
+            });
+        }
+        changeplan(req.params.plan,new_review.rating,-1);
+        res.json({
+            message:"Review Created",
+            data:new_review
+        });
+    }
+    catch(err){
+        res.status(500).json({
+            message:err.message
+        });
+    }
+}
+module.exports.updatereview=async function updatereview(req,res){
+    try{
+        const new_review=await reviewModel.findById(req.params.id);
+        if(!new_review){
+            return res.json({
+                message:"Review Not FOund"
+            });
+        }
+        let rating=new_review.rating;
+        for(let keys in req.body){
+            new_plan[keys]=req.body[keys];
+        }
+        if(new_plan.rating!=rating) changeplan(new_review.plan,new_plan.rating,rating); 
+        await new_plan.save();
+        res.json({
+            message:"Review Created",
+            data:new_review
+        });
+    }
+    catch(err){
+        res.json({
+            message:err.message
+        });
+    }
+}
+module.exports.deletereview=async function deletereview(req,res){
+    try{
+        const new_review=await reviewModel.findByIdAndDelete(req.params.id);
+        res.json({
+            message:"Plan Deleted Successfully",
+            data:new_review
+        });
+    }
+    catch(err){
+        res.status(500).json({
+            message:err.message
+        });
+    }
+}

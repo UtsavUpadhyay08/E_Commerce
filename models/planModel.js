@@ -25,6 +25,9 @@ const planSchema=new mongoose.Schema({
     ratingsAverage:{
         type:Number
     },
+    totalratings:{
+        type:Number
+    },
     discount:{
         type:Number,
         required:true,

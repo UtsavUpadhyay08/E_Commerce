@@ -184,3 +184,15 @@ module.exports.logout=async function logout(req,res){
         });
     }
 }
+
+module.exports.changeplan=async function changeplan(plan_id,incr_rating,decr_rating){
+    const plan=await planModel.findById(plan_id);
+    let new_rating = plan.ratingsAverage,totalratings=plan.totalratings;
+    new_rating+=incr_rating;
+    new_rating+=decr_rating;
+    if(decr_rating>=0) totalratings++;
+    new_rating=(new_rating/totalratings);
+    plan.ratingsAverage=new_rating;
+    plan.totalratings=totalratings;
+    await plan.save();
+}

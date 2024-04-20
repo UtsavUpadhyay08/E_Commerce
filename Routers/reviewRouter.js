@@ -13,11 +13,11 @@ reviewRouter.route("/:id")
 .get(getplanreview)
 
 reviewRouter.use(protectRoute)
-reviewRouter.route("/crud")
+reviewRouter.route("/crud/:plan")
 .put(createreview)
 
 
-reviewRouter.route("/crud")
+reviewRouter.route("/crud/:id")
 .patch(updatereview)
 .delete(deletereview)
 
