@@ -1,8 +1,7 @@
 const mongoose=require('mongoose');
-const userSchema=require('../models/UserModel')
+const userModel=require('../models/UserModel')
 const jwt=require('jsonwebtoken');
-const key=require('../secret');
-const userModel=mongoose.model('userModel',userSchema);
+const {key}=require('../secret');
 const bcrypt=require('bcrypt');
 
 module.exports.signup=async function signup(req,res){

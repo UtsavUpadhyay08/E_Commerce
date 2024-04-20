@@ -1,6 +1,5 @@
 const mongoose=require('mongoose');
-
-const url="mongodb+srv://utsavup2004:EWMYii6V5B58RGc2@cluster0.kjwg5z6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const {url}=require("../secret");
 
 mongoose.connect(url)
 .then(()=>console.log("Review Database Connected"))

@@ -1,8 +1,7 @@
 const mongoose=require('mongoose');
 const bcrypt=require('bcrypt');
-const token=require("crypto-token")
-
-const url="mongodb+srv://utsavup2004:EWMYii6V5B58RGc2@cluster0.kjwg5z6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const token=require("crypto-token");
+const {url,key}=require("../secret");
 
 mongoose.connect(url)
 .then(()=>console.log("User Database Connected"))
