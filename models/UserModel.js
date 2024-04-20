@@ -48,10 +48,6 @@ const userSchema=mongoose.Schema({
     resetToken:String
 })
 
-
-module.exports=userSchema
-
-
 userSchema.pre('save',function(){
     this.confirmpassword=undefined;
 })
@@ -76,3 +72,7 @@ userSchema.methods.resetPasswordHandler=function(password,confirmpassword){
     // console.log(reset_token);
     // return reset_token;
 }
+
+const userModel=mongoose.model('userModel',userSchema);
+
+module.exports=userModel

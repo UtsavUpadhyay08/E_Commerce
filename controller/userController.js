@@ -1,6 +1,4 @@
-const mongoose=require("mongoose");
-const userSchema=require('../models/UserModel')
-const userModel=mongoose.model('userModel',userSchema);
+const userModel=require('../models/UserModel')
 
 module.exports.getUser=async function getUser(req,res){
     try{
