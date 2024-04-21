@@ -1,3 +1,4 @@
+const multer = require('multer');
 const userModel=require('../models/UserModel')
 
 module.exports.getUser=async function getUser(req,res){
@@ -87,3 +88,24 @@ module.exports.updateProfileImage=function updateProfileImage(req,res){
     });
 }
 
+//multer
+const multerstorage=multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,"C:\\Users\\utsav\\Desktop\\Backend Development with express\\Learn\\server\\public\\images");
+    },
+    filename:function(req,file,cb){
+        cb(null,`user-${Date.now()}.jpeg`);
+    }
+})
+const filter=function(req,file,cb){
+    if(file.mimetype.startsWith("image")){
+        cb(null,true);
+    }
+    else{
+        cb(new Error("Please upload image"),false);
+    }
+}
+module.exports.upload=upload=multer({
+    storage:multerstorage,
+    fileFilter:filter
+});
