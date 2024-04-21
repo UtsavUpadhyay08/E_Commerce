@@ -17,11 +17,12 @@ module.exports.createsession=async function createsession(req,res){
             line_items: [
                 {
                 // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                    // price:"124",
                     name:plan.name,
-                    amount:plan.price*100,
+                    amount:100,
                     currency:"inr",
-                    quantity: 1,
-                },
+                    quantity: 1
+                }
             ],
             mode: 'payment',
             success_url: `${req.protocol}://${req.hostname}:/plan`,
