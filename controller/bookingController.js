@@ -18,10 +18,11 @@ module.exports.createsession=async function createsession(req,res){
                 {
                 // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
                     // price:"124",
-                    name:plan.name,
-                    amount:100,
-                    currency:"inr",
-                    quantity: 1
+                    // name:plan.name,
+                    // amount:100,
+                    // currency:"inr",
+                    // quantity: 1
+                    // The `price` parameter should be the ID of a price object, rather than the literal numerical price. Please see https://stripe.com/docs/billing/prices-guide#create-prices for more information about how to set up price objects.
                 }
             ],
             mode: 'payment',
