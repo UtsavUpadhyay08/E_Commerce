@@ -80,3 +80,10 @@ module.exports.getAllUsers=async function getAllUsers(req,res){
         data:users
     });   
 }
+
+module.exports.updateProfileImage=function updateProfileImage(req,res){
+    res.json({
+        message:"file uploaded successfully"
+    });
+}
+
