@@ -4,10 +4,19 @@ const jwt=require('jsonwebtoken');
 const {key}=require('../secret');
 const bcrypt=require('bcrypt');
 const planModel = require('../models/planModel');
+const { sendmail } = require('../Utility/nodemailer');
 
 module.exports.signup=async function signup(req,res){
     try{
-        const user=await userModel.create(req.body);
+        const user=new userModel(req.body);
+        const new_token=await user.createResetToken();
+        const new_link=`${req.protocol}://${req.headers.host}/verify/${new_token}`;
+        let obj={
+            email:user.email,
+            link:new_link
+        };
+        sendmail("Signup",obj);
+        await user.save();
         if(user){
             res.json({
                 message:"User Created",
@@ -133,8 +142,13 @@ module.exports.forgetPassword=async function forgetPasword(req,res){
             });
             return;
         }
-        const new_token=await user.createResetToken();
-        const new_link=`${req.protocol}://${req.headers.host}/resetPassword/${new_token}`;
+        const new_token=user.resetToken;
+        const new_link=`${req.protocol}://${req.headers.host}/user/resetPassword/${new_token}`;
+        let obj={
+            email:user.email,
+            link:new_link
+        };
+        sendmail("reset",obj);
         // await user.save();
         // console.log(new_token);
         res.json({
@@ -151,6 +165,7 @@ module.exports.forgetPassword=async function forgetPasword(req,res){
 
 module.exports.resetPassword=async function resetPassword(req,res){
     try{
+        // console.log(req.params);
         let user=await userModel.findOne({resetToken:req.params.token});
         if(!user){
             res.json({
@@ -158,8 +173,8 @@ module.exports.resetPassword=async function resetPassword(req,res){
             });
             return;
         }
-        await user.resetPasswordHandle(req.body.password,req.body.confirmpassword);
-        // await user.save();
+        await user.resetPasswordHandler(req.body.password,req.body.confirmpassword);
+        await user.save();
         res.json({
             message:"New Password saved",
             data:user
